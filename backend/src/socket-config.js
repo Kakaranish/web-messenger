@@ -1,10 +1,9 @@
-import socketio from 'socket.io';
 import moment from 'moment';
 import MessageModel from './models/Message';
 
 let activeUsers = [];
 
-export const socketActions = socket => {
+export const socketActions = (io, socket) => {
     console.log(`${socket.id} connected`);
 
     socket.on('join', ({ nickname, room }) => {
@@ -23,7 +22,7 @@ export const socketActions = socket => {
             }]);
         };
 
-        socket.to(room).emit('activeUsersChanged',
+        io.to(room).emit('activeUsersChanged',
             activeUsers.filter(u => u.room === room));
         socket.to(room).emit('serverMessage', {
             nickname: 'admin',
@@ -47,10 +46,10 @@ export const socketActions = socket => {
 
     socket.on('disconnect', () => {
         let currentUser = activeUsers.filter(u => u.socketId === socket.id)[0];
-        if(!currentUser) return;
+        if (!currentUser) return;
 
         activeUsers = activeUsers.filter(u => u.socketId !== socket.id);
-        
+
         socket.to(currentUser.room).emit('activeUsersChanged',
             activeUsers.filter(u => u.room === currentUser.room));
         socket.to(currentUser.room).emit('serverMessage', {

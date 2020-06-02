@@ -10,7 +10,7 @@ connectDb();
 
 const server = http.createServer(app);
 const io = socketio(server);
-io.on('connection', socketActions);
+io.on('connection', socket => socketActions(io, socket));
 
 const port = process.env.PORT
 server.listen(port, () => {

@@ -37,11 +37,10 @@ const ChatPage = ({ location }) => {
 		});
 	}, []);
 
-	const onSend = message => {
+	const onSendCb = message => {
 		socket.emit('message', { nickname, room, content: message }, err => {
 			if (err) alert(err);
 		});
-
 		setMessages(messages => [...messages, { nickname: 'You', content: message }]);
 	};
 
@@ -59,7 +58,7 @@ const ChatPage = ({ location }) => {
 						<UsersSection users={activeUsers} />
 					</div>
 
-					<MessageInput onSendCb={onSend} />
+					<MessageInput onSendCb={onSendCb} />
 				</div>
 			</div>
 		</div>
