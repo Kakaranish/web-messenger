@@ -14,6 +14,7 @@ const ChatPage = ({ location }) => {
 	const { nickname, room } = queryString.parse(location.search);
 
 	const [messages, setMessages] = useState([]);
+	const [activeUsers, setActiveUsers] = useState([]);
 
 	useEffect(() => {
 		socket = io('http://localhost:9000');
@@ -22,12 +23,14 @@ const ChatPage = ({ location }) => {
 			if (err) alert(err);
 		});
 
-		socket.on('joinRes', messages => setMessages(messages);
+		socket.on('joinRes', messages => setMessages(messages));
 
-		socket.on('serverMessage', message => 
+		socket.on('serverMessage', message =>
 			setMessages(messages => [...messages, message])
 		);
 
+		socket.on('activeUsersChanged', users => setActiveUsers(users));
+		
 		socket.on('message', message => {
 			setMessages(messages => [...messages, { content: message.content, nickname: message.nickname }]);
 		});
