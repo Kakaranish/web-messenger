@@ -5,6 +5,8 @@ import ScrollToBottom from 'react-scroll-to-bottom';
 const MessagesBox = ({ messages, currentUserNickname }) => {
 
     const boxStyle = css({
+        width: "70%",
+        float: "left",
         marginTop: "20px",
         padding: "10px",
         height: "60vh",

@@ -3,6 +3,7 @@ import io from 'socket.io-client';
 import queryString from 'query-string';
 import MessageInput from './components/MessageInput';
 import MessagesBox from './components/MessagesBox';
+import UsersSection from './components/UsersSection';
 
 /**
  * @type {SocketIOClient.Socket}
@@ -30,7 +31,7 @@ const ChatPage = ({ location }) => {
 		);
 
 		socket.on('activeUsersChanged', users => setActiveUsers(users));
-		
+
 		socket.on('message', message => {
 			setMessages(messages => [...messages, { content: message.content, nickname: message.nickname }]);
 		});
@@ -53,7 +54,10 @@ const ChatPage = ({ location }) => {
 				<div className="offset-3 col-6">
 					<h3>Room {room}</h3>
 
-					<MessagesBox messages={messages} currentUserNickname={nickname} />
+					<div>
+						<MessagesBox messages={messages} currentUserNickname={nickname} />
+						<UsersSection users={activeUsers} />
+					</div>
 
 					<MessageInput onSendCb={onSend} />
 				</div>

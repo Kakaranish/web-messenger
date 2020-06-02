@@ -59,9 +59,9 @@ io.on('connection', socket => {
     });
 
     socket.on('disconnect', () => {
-        console.log(`${currentUser.nickname} left room`);
-        
         let currentUser = activeUsers.filter(u => u.socketId === socket.id)[0];
+        
+        console.log(`${currentUser.nickname} left room`);
         activeUsers = activeUsers.filter(u => u.socketId !== socket.id);
         
         socket.to(currentUser.room).emit('activeUsersChanged',
