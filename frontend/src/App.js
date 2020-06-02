@@ -1,4 +1,6 @@
 import React from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle';
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import MainPage from './pages/MainPage';
 
