@@ -22,21 +22,23 @@ const ChatPage = ({ location }) => {
 			if (err) alert(err);
 		});
 
-		socket.on('serverMessage', message => {
-			setMessages(messages => [...messages, message]);
-		});
+		socket.on('joinRes', messages => setMessages(messages);
+
+		socket.on('serverMessage', message => 
+			setMessages(messages => [...messages, message])
+		);
 
 		socket.on('message', message => {
-			setMessages(messages => [...messages, { message: message.message, nickname: message.nickname }]);
+			setMessages(messages => [...messages, { content: message.content, nickname: message.nickname }]);
 		});
 	}, []);
 
 	const onSend = message => {
-		socket.emit('message', { nickname, room, message }, err => {
+		socket.emit('message', { nickname, room, content: message }, err => {
 			if (err) alert(err);
 		});
 
-		setMessages(messages => [...messages, { nickname: 'You', message }]);
+		setMessages(messages => [...messages, { nickname: 'You', content: message }]);
 	};
 
 	if (!nickname || !room) return <h3>Passed invalid data</h3>

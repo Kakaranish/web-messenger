@@ -14,17 +14,17 @@ const MessagesBox = ({ messages, currentUserNickname }) => {
 
     const styleMessage = message => {
         if (message.nickname === currentUserNickname) return <>
-            <b>You: </b> {message.message}
+            <b>You: </b> {message.content}
         </>
         else if (message.nickname === 'admin') return <>
             <b>Admin:&nbsp;
                          <span className="text-success">
-                    {message.message}
+                    {message.content}
                 </span>
             </b>
         </>
         else return <>
-            <b>{message.nickname}: </b> {message.message}
+            <b>{message.nickname}: </b> {message.content}
         </>
     }
 

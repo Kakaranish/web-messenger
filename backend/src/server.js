@@ -3,8 +3,13 @@ import http from 'http';
 import bodyParser from "body-parser";
 import socketio from 'socket.io';
 import cors from 'cors';
+import moment from 'moment';
+import MessageModel from './models/Message';
+import { connectDb } from './utils';
 
 require('dotenv').config();
+
+connectDb();
 
 const app = express();
 const server = http.createServer(app);
@@ -17,18 +22,28 @@ io.on('connection', socket => {
         socket.join(room);
         console.log(`${nickname} joined room ${room}`);
 
-        socket.emit('serverMessage', {
-            nickname: 'admin',
-            message: 'Welcome to the server!'
-        });
+        const sendResponse = async () => {
+            const messages = await MessageModel.find({});
 
-        callback();
+            socket.emit('joinRes', [...messages, {
+                nickname: 'admin',
+                content: 'Welcome to the server'
+            }]);
+        }
+        sendResponse();
     });
 
     socket.on('message', (message, callback) => {
         console.log(message);
         socket.to(message.room).emit('message', message);
-        callback();
+
+        const saveMessage = async () => await new MessageModel({
+            nickname: message.nickname,
+            room: message.room,
+            content: message.content,
+            datetime: moment.utc()
+        }).save();
+        saveMessage();
     });
 
     socket.on('disconnect', () => {
